@@ -6,4 +6,5 @@
 `env/Scripts/activate.bat`
 `pip install -r requirements.txt`
 
-`python django/manage.py runserver`
+`py src/app.py`
+`deactivate`

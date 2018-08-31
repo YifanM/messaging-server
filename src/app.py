@@ -14,5 +14,5 @@ if __name__ == '__main__':
     thread = Thread(target=myamqp.receive)
     thread.start()
     print("rabbit started")
-    myamqp.send("MATCH_RESULT", { "username": "playerone", "colour": "black", "result": "win" })
+    myamqp.onlinePlayers()
     ioloop.IOLoop.instance().start()
