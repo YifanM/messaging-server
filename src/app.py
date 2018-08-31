@@ -2,6 +2,7 @@ import myamqp
 import mysocket
 from tornado import web, ioloop
 import signal
+from threading import Thread
 
 app = web.Application([
     (r'/ws', mysocket.WsHandler)
@@ -9,5 +10,9 @@ app = web.Application([
 
 if __name__ == '__main__':
     app.listen(8888)
-    print('started on 8888')
+    print("started on 8888")
+    thread = Thread(target=myamqp.receive)
+    thread.start()
+    print("rabbit started")
+    myamqp.send("MATCH_RESULT", { "username": "playerone", "colour": "black", "result": "win" })
     ioloop.IOLoop.instance().start()
