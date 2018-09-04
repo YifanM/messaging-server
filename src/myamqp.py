@@ -1,5 +1,7 @@
 import pika
 import json
+import mysocket
+from tornado import web, ioloop
 
 queueName = 'gomoku';
 queueNameToClient = queueName + 'ToClient';
@@ -14,7 +16,7 @@ def matchResult(username, colour, result):
 def onlinePlayers():
     send("ONLINE_PLAYERS", {})
 
-def updatePlayer():
+def updatePlayer(username):
     send("UPDATE_PLAYER", { "username": username })
 
 def send(type, content):
@@ -27,8 +29,10 @@ def send(type, content):
     }))
     connection.close()
 
-def received(channel, method, properties, message):
-    print(json.loads(message))
+def received(channel, method, properties, inMessage):
+    message = json.loads(inMessage)
+    if message["type"] == "ONLINE_PLAYERS":
+        mysocket.broadcast(inMessage)
 
 def receive():
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
